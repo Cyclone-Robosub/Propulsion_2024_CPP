@@ -1,19 +1,29 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <nlohmann/json.hpp>
+#include <fstream>
 #include "Thruster_Commander.h"
 #include "eigen-3.4.0/Eigen/Dense"
 
 Thruster_Commander::Thruster_Commander()
 {
+
+	using json = nlohmann:json;
 	// TODO: Move all the hardcoded values in this constructor to a config file
 	//       this will make unit testing simpler
-	
-	rho_water = 1025; // Density of water (kg/m^3)
-	
+
+	std::ifstream constants_file("data/TestConstants.json");
+	json constantData = json.parse(constants_file);
+
+
+
+
+	rho_water = constantData["rho_water"]; // Density of water (kg/m^3)
+
 	// Values come from Onshape 2024 Vehicle V10 11/12/24
-	num_thrusters = 8;
-	Eigen::Matrix<float, 1, 3> mass_center_inches = { 0, 0.466, 1.561 };
+	num_thrusters = constantData["num_thrusters"];
+	Eigen::Matrix<float, 1, 3> mass_center_inches = constantData["mass_center_inches"];
 	mass_center = mass_center_inches * 0.0254; // convert to meters
 	
 	volume_center = mass_center; // volume center, currently, is a complete guess
@@ -23,7 +33,7 @@ Thruster_Commander::Thruster_Commander()
 	// front left top, front right top, rear left top, rear right top, front left bottom, front right bottom, rear left bottom, rear right bottom
 	// x, y, z coordinates here are how the appear on onshape. May need to be corrected to match surge, sway, heave
 	thruster_positions = Eigen::Matrix<float, 8, 3>::Zero();
-	thruster_positions.row(0) <<  -.2035, .2535, .042 ;
+	thruster_positions.row(0) <<  constantData["thruster_positions"]["row0"];
 	thruster_positions.row(1) << .2035, .2535, -.042;
 	thruster_positions.row(2) << -.2035, -.2545, .042;
 	thruster_positions.row(3) << .2035, -.2545, .042;

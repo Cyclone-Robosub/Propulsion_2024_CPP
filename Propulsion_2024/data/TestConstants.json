@@ -1,0 +1,15 @@
+{
+    "rhowater": 1025,
+    "num_thrusters": 8,
+    "mass_center_inches": [ 0, 0.466, 1.561 ],
+    "thruster_positions": [
+        {
+            "row0": [
+                "-.2035",
+                ".2535",
+                ".042"
+            ]
+        }
+    ] 
+
+}
