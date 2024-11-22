@@ -66,7 +66,6 @@ Thruster_Commander::Thruster_Commander()
 	angular_velocity = Eigen::Matrix<float, 1, 3>::Zero();
 	acceleration = Eigen::Matrix<float, 1, 3>::Zero();
 	angular_acceleration = Eigen::Matrix<float, 1, 3>::Zero();
-
 }
 
 Thruster_Commander::~Thruster_Commander()
@@ -117,7 +116,7 @@ int Thruster_Commander::get_pwm(int thruster_num, float force) {
 	return 1500;
 }
 
-//
+
 Eigen::Matrix<float, 1, 3> Thruster_Commander::compute_forces(force_array forces)
 {
 	Eigen::Matrix<float, 1, 3> total_force = Eigen::Matrix<float, 1, 3>::Zero();
@@ -171,63 +170,91 @@ force_array Thruster_Commander::thrust_compute_fz(float z_force)
 	} 
 	return forces;
 }
-force_array Thruster_Commander::thrust_compute_fy(float y_force){
+force_array Thruster_Commander::thrust_compute_fy(float y_force)
+{
+
+	// fx, fz and mz should be zero
+	// my and mz should be small enough to keep the vehicle stable
+	
 	force_array forces;
 	return forces;
 }
-force_array Thruster_Commander::thrust_compute_fx(float x_force){
+force_array Thruster_Commander::thrust_compute_fx(float x_force)
+{
+	// fy, fz and mz should be zero
+	// mx and my should be small enough to keep the vehicle stable
 	force_array forces;
 	return forces;
 
 }
 force_array Thruster_Commander::thrust_compute_fx_fy(float x_force, float y_force)
 {
+	// fz and mz should be zero
+	// mx and my should be small enough to keep the vehicle stable
 	force_array forces;
 	return forces;
 }
 force_array Thruster_Commander::thrust_compute_mz(float z_torque)
 {
+	// fx, fy and fz should be zero
+	// mx and my should be small enough to keep the vehicle stable
 	force_array forces;
 	return forces;
 }
 force_array Thruster_Commander::thrust_compute_fz_mz(float z_force, float z_torque) 
 {
+	// fx and fy should be zero
+	// mx and my should be small enough to keep the vehicle stable
 	force_array forces;
 	return forces;
 }
-force_array Thruster_Commander::thrust_compute_fy_mz(float force, float torque) 
+force_array Thruster_Commander::thrust_compute_fy_mz(float y_force, float z_torque) 
 {
+	// fx and fz should be zero
+	// mx and my should be small enough to keep the vehicle stable
 	force_array forces;
 	return forces;
 }
-force_array Thruster_Commander::thrust_compute_fx_mz(float force, float torque) 
+force_array Thruster_Commander::thrust_compute_fx_mz(float x_force, float z_torque) 
 {
+	// fy and fz should be zero
+	// mx and my should be small enough to keep the vehicle stable
 	force_array forces;
 	return forces;
 }
-force_array Thruster_Commander::thrust_compute_fx_fy_mz(float x_force, float y_force, float torque)
+force_array Thruster_Commander::thrust_compute_fx_fy_mz(float x_force, float y_force, float z_torque)
 {
+	// fz should be zero
+	// mx and my should be small enough to keep the vehicle stable
 	force_array forces;
 	return forces;
 }
 force_array Thruster_Commander::thrust_compute_fx_fy_fz(float x_force, float y_force) 
 {
+	// mz should be zero
+	// mx and my should be small enough to keep the vehicle stable
 	force_array forces;
 	return forces;
 }
-force_array Thruster_Commander::thrust_compute_fx_fy_fz_mz(float x_distance, float y_force, float z_force, float torque) 
+force_array Thruster_Commander::thrust_compute_fx_fy_fz_mz(float x_distance, float y_force, float z_force, float z_torque) 
 {
+	// mx and my should be small enough to keep the vehicle stable
 	force_array forces;
 	return forces;
 }
 force_array Thruster_Commander::thrust_compute_fx_fy_fz_mx_my_mz(float x_force, float y_force, float z_force, float, float x_torque, float y_torque, float z_torque) 
 {
+	// this is the most general case
+	// all forces and torques are specified
 	force_array forces;
 	return forces;
 }
 
-Command Thruster_Commander::simple_vertical_travel(float z_distance)
+force_array Thruster_Commander::thrust_compute(Eigen::Matrix<float, 1, 6> force_torque, bool simple=true)
 {
-	Command command;
-	return command;
+	// this is a general case force function
+	// it will call other force functions depending on what forces and torques are specified
+	// if simple=true, mz and my will be neglected
+	force_array forces;
+	return forces;
 }

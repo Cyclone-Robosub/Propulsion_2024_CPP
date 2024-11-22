@@ -94,7 +94,7 @@ public:
 	bool simple_is_it_possible(float x_force, float y_force, float z_force, float z_torque);
 	bool is_it_possible(float x_force, float y_force, float z_force, float x_torque, float y_torque, float z_torque);
 
-	// force-torque commands
+	// force-torque computations
 	// these functions compute the forces from each thruster necessary to acheive a given force or torque on the sub
 	// these functions do not condier drag, or any other forces not produced directly by the thruster
 	// suffixes state which forces and torques are being driven by the thrusters
@@ -104,20 +104,26 @@ public:
 	force_array thrust_compute_fy(float y_force);
 	force_array thrust_compute_fx(float x_force);
 	force_array thrust_compute_fx_fy(float x_force, float y_force);
-	
 	force_array thrust_compute_mz(float z_torque);
 	force_array thrust_compute_fz_mz(float z_force, float z_torque);
 	force_array thrust_compute_fy_mz(float y_force, float z_torque);
 	force_array thrust_compute_fx_mz(float force, float torque);
 	force_array thrust_compute_fx_fy_mz(float x_force, float y_force, float torque);
-
 	force_array thrust_compute_fx_fy_fz(float x_force, float y_force);
 	force_array thrust_compute_fx_fy_fz_mz(float x_distance, float y_force, float z_force, float torque);
-
 	force_array thrust_compute_fx_fy_fz_mx_my_mz(float x_force, float y_force, float z_force, float, float x_torque, float y_torque, float z_torque);
 
-	// distance commands
-	Command simple_vertical_travel(float z_distance);
+	// this is a general case force function
+	// it will call other force functions depending on what forces and torques are specified
+	// if simple=true, mz and my will be neglected
+	force_array thrust_compute(Eigen::Matrix<float, 1, 6> force_torque, bool simple=true);
+
+	// computes a force array from an acceleration vector (surge, sway, heave) in m/s^2, and (roll, pitch, yaw) in rad/s^2
+	force_array acceleration_compute(Eigen::Matrix<float, 1, 6> acceleration, bool simple=true);
+
+	// generates a command to a target velocity
+	// target velocity is a 1x6 matrix with (sway, surge, heave) linear velocities in m/s and (roll, pitch, yaw) angular velocities in r/s
+	Command accelerate_to(Eigen::Matrix<float, 1, 6> target_velocity);
 	
 };
 

@@ -48,6 +48,14 @@ int thruster_commander_test_0()
 	thruster_commander.thrust_compute_fz(5);
 	return 0;
 }
+int thrust_commander_constructor_tests()
+{
+    return 0;
+}
+int pwm_lookup_test()
+{
+	return 0;
+}
 
 
 // TODO:

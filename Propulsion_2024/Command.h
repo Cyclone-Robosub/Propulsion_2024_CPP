@@ -12,9 +12,11 @@ struct pwm_array {
     int pwm_signals[8];
 
 };
-
 struct Command {
     pwm_array thruster_pwms; // PWM values for each thruster
     float duration;       // Duration of the command in seconds
+};
+struct Sequence {
+	std::vector<Command> commands;
 };
 
