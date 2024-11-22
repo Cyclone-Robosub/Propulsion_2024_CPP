@@ -1,28 +1,59 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35506.116 d17.12
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Propulsion_2024", "Propulsion_2024\Propulsion_2024.vcxproj", "{ECF3F699-16C3-4461-95C4-4DDE2F03268C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CMakePredefinedTargets", "CMakePredefinedTargets", "{042C5223-6338-3935-AB14-1B0870423DCD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALL_BUILD", "ALL_BUILD.vcxproj", "{5ADD0FAF-790D-3A9C-82B6-79844C889AB7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{59C97C83-9F28-3F29-9AEF-02342869B188} = {59C97C83-9F28-3F29-9AEF-02342869B188}
+		{E118FD34-0FFB-3A1E-B2AD-70159A5696BC} = {E118FD34-0FFB-3A1E-B2AD-70159A5696BC}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Propulsion_2024", "Propulsion_2024.vcxproj", "{59C97C83-9F28-3F29-9AEF-02342869B188}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E118FD34-0FFB-3A1E-B2AD-70159A5696BC} = {E118FD34-0FFB-3A1E-B2AD-70159A5696BC}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZERO_CHECK", "ZERO_CHECK.vcxproj", "{E118FD34-0FFB-3A1E-B2AD-70159A5696BC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
+		Debug|ARM64 = Debug|ARM64
+		Release|ARM64 = Release|ARM64
+		MinSizeRel|ARM64 = MinSizeRel|ARM64
+		RelWithDebInfo|ARM64 = RelWithDebInfo|ARM64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ECF3F699-16C3-4461-95C4-4DDE2F03268C}.Debug|x64.ActiveCfg = Debug|x64
-		{ECF3F699-16C3-4461-95C4-4DDE2F03268C}.Debug|x64.Build.0 = Debug|x64
-		{ECF3F699-16C3-4461-95C4-4DDE2F03268C}.Debug|x86.ActiveCfg = Debug|Win32
-		{ECF3F699-16C3-4461-95C4-4DDE2F03268C}.Debug|x86.Build.0 = Debug|Win32
-		{ECF3F699-16C3-4461-95C4-4DDE2F03268C}.Release|x64.ActiveCfg = Release|x64
-		{ECF3F699-16C3-4461-95C4-4DDE2F03268C}.Release|x64.Build.0 = Release|x64
-		{ECF3F699-16C3-4461-95C4-4DDE2F03268C}.Release|x86.ActiveCfg = Release|Win32
-		{ECF3F699-16C3-4461-95C4-4DDE2F03268C}.Release|x86.Build.0 = Release|Win32
+		{5ADD0FAF-790D-3A9C-82B6-79844C889AB7}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{5ADD0FAF-790D-3A9C-82B6-79844C889AB7}.Release|ARM64.ActiveCfg = Release|ARM64
+		{5ADD0FAF-790D-3A9C-82B6-79844C889AB7}.MinSizeRel|ARM64.ActiveCfg = MinSizeRel|ARM64
+		{5ADD0FAF-790D-3A9C-82B6-79844C889AB7}.RelWithDebInfo|ARM64.ActiveCfg = RelWithDebInfo|ARM64
+		{59C97C83-9F28-3F29-9AEF-02342869B188}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{59C97C83-9F28-3F29-9AEF-02342869B188}.Debug|ARM64.Build.0 = Debug|ARM64
+		{59C97C83-9F28-3F29-9AEF-02342869B188}.Release|ARM64.ActiveCfg = Release|ARM64
+		{59C97C83-9F28-3F29-9AEF-02342869B188}.Release|ARM64.Build.0 = Release|ARM64
+		{59C97C83-9F28-3F29-9AEF-02342869B188}.MinSizeRel|ARM64.ActiveCfg = MinSizeRel|ARM64
+		{59C97C83-9F28-3F29-9AEF-02342869B188}.MinSizeRel|ARM64.Build.0 = MinSizeRel|ARM64
+		{59C97C83-9F28-3F29-9AEF-02342869B188}.RelWithDebInfo|ARM64.ActiveCfg = RelWithDebInfo|ARM64
+		{59C97C83-9F28-3F29-9AEF-02342869B188}.RelWithDebInfo|ARM64.Build.0 = RelWithDebInfo|ARM64
+		{E118FD34-0FFB-3A1E-B2AD-70159A5696BC}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{E118FD34-0FFB-3A1E-B2AD-70159A5696BC}.Debug|ARM64.Build.0 = Debug|ARM64
+		{E118FD34-0FFB-3A1E-B2AD-70159A5696BC}.Release|ARM64.ActiveCfg = Release|ARM64
+		{E118FD34-0FFB-3A1E-B2AD-70159A5696BC}.Release|ARM64.Build.0 = Release|ARM64
+		{E118FD34-0FFB-3A1E-B2AD-70159A5696BC}.MinSizeRel|ARM64.ActiveCfg = MinSizeRel|ARM64
+		{E118FD34-0FFB-3A1E-B2AD-70159A5696BC}.MinSizeRel|ARM64.Build.0 = MinSizeRel|ARM64
+		{E118FD34-0FFB-3A1E-B2AD-70159A5696BC}.RelWithDebInfo|ARM64.ActiveCfg = RelWithDebInfo|ARM64
+		{E118FD34-0FFB-3A1E-B2AD-70159A5696BC}.RelWithDebInfo|ARM64.Build.0 = RelWithDebInfo|ARM64
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
+	GlobalSection(NestedProjects) = preSolution
+		{5ADD0FAF-790D-3A9C-82B6-79844C889AB7} = {042C5223-6338-3935-AB14-1B0870423DCD}
+		{E118FD34-0FFB-3A1E-B2AD-70159A5696BC} = {042C5223-6338-3935-AB14-1B0870423DCD}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2A2D8049-8A0B-3F75-9D73-EED0B1AF9662}
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
 EndGlobal

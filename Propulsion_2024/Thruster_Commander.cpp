@@ -1,10 +1,10 @@
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <nlohmann/json.hpp>
-#include <fstream>
-#include "Thruster_Commander.h"
 #include "eigen-3.4.0/Eigen/Dense"
+#include "json-develop/include/nlohmann/json.hpp"
+#include "Thruster_Commander.h"
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <string>
 
 Thruster_Commander::Thruster_Commander()
 {
@@ -15,9 +15,6 @@ Thruster_Commander::Thruster_Commander()
 
 	std::ifstream constants_file("data/TestConstants.json");
 	json constantData = json.parse(constants_file);
-
-
-
 
 	rho_water = constantData["rho_water"]; // Density of water (kg/m^3)
 
@@ -34,10 +31,10 @@ Thruster_Commander::Thruster_Commander()
 	// x, y, z coordinates here are how the appear on onshape. May need to be corrected to match surge, sway, heave
 	thruster_positions = Eigen::Matrix<float, 8, 3>::Zero();
 	thruster_positions.row(0) <<  constantData["thruster_positions"]["row0"];
-	thruster_positions.row(1) << .2035, .2535, -.042;
-	thruster_positions.row(2) << -.2035, -.2545, .042;
-	thruster_positions.row(3) << .2035, -.2545, .042;
-	thruster_positions.row(4) << -.1375, .167, -.049;
+	thruster_positions.row(1) << constantData["thruster_positions"]["row1"];
+	thruster_positions.row(2) << constantData["thruster_positions"]["row2"]2;
+	thruster_positions.row(3) << constantData["thruster_positions"]["row3"];
+	thruster_positions.row(4) << constantData["thruster_positions"]["row4"];
 	thruster_positions.row(5) << .1375, .167, -.049;
 	thruster_positions.row(6) << -.1165, -.1975, -.049;
 	thruster_positions.row(7) << .1165, -.1975, -.049;
