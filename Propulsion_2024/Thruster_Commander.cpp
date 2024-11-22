@@ -48,14 +48,14 @@ Thruster_Commander::Thruster_Commander()
 	const double PI = 3.141592653589793;
 	float sin45 = sin(45 * PI / 180);
 	thruster_directions = Eigen::Matrix<float, 8, 3>::Zero();
-	thruster_directions.row(0) << 0, 0, 1;
-	thruster_directions.row(1) << 0, 0, 1;
-	thruster_directions.row(2) << 0, 0, 1;
-	thruster_directions.row(3) << 0, 0, 1;
-	thruster_directions.row(4) << -sin45, -sin45, 0;
-	thruster_directions.row(5) <<  -sin45, sin45, 0;
-	thruster_directions.row(6) << -sin45, sin45, 0;
-	thruster_directions.row(7) << -sin45, -sin45, 0;
+	thruster_directions.row(0) << constantData["thruster_directions"]["row0"].get<float>();
+	thruster_directions.row(1) << constantData["thruster_directions"]["row1"].get<float>()
+	thruster_directions.row(2) << constantData["thruster_directions"]["row2"].get<float>();
+	thruster_directions.row(3) << constantData["thruster_directions"]["row3"].get<float>();
+	thruster_directions.row(4) << constantData["thruster_directions"]["row4"].get<float>();
+	thruster_directions.row(5) <<  constantData["thruster_directions"]["row5"].get<float>();
+	thruster_directions.row(6) << constantData["thruster_directions"]["row6"].get<float>();
+	thruster_directions.row(7) << constantData["thruster_directions"]["row7"].get<float>();
 
 	thruster_torques = Eigen::Matrix<float, 8, 3>::Zero();
 	for (int i = 0; i < num_thrusters; i++)
@@ -183,7 +183,7 @@ force_array Thruster_Commander::thrust_compute_fy(float y_force)
 
 	// fx, fz and mz should be zero
 	// my and mz should be small enough to keep the vehicle stable
-	
+	float forceforthruster4;
 	force_array forces;
 	return forces;
 }
