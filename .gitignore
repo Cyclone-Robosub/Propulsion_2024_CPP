@@ -364,3 +364,5 @@ FodyWeavers.xsd
 /Propulsion_2024/.idea
 /Propulsion_2024/cmake-build-debug
 /Propulsion_2024/build/
+/build
+.vscode/settings.json
