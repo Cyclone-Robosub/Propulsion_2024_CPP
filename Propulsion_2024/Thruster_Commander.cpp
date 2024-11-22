@@ -1,5 +1,6 @@
 #include "eigen-3.4.0/Eigen/Dense"
-#include "json-develop/include/nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
+#include "json-develop/include/json.hpp"
 #include "Thruster_Commander.h"
 #include <cmath>
 #include <fstream>
@@ -9,12 +10,12 @@
 Thruster_Commander::Thruster_Commander()
 {
 
-	using json = nlohmann:json;
+	using jsons = nlohmann::json;
 	// TODO: Move all the hardcoded values in this constructor to a config file
 	//       this will make unit testing simpler
 
 	std::ifstream constants_file("data/TestConstants.json");
-	json constantData = json.parse(constants_file);
+	jsons constantData = jsons.parse(constants_file);
 
 	rho_water = constantData["rho_water"]; // Density of water (kg/m^3)
 
@@ -32,12 +33,12 @@ Thruster_Commander::Thruster_Commander()
 	thruster_positions = Eigen::Matrix<float, 8, 3>::Zero();
 	thruster_positions.row(0) <<  constantData["thruster_positions"]["row0"];
 	thruster_positions.row(1) << constantData["thruster_positions"]["row1"];
-	thruster_positions.row(2) << constantData["thruster_positions"]["row2"]2;
+	thruster_positions.row(2) << constantData["thruster_positions"]["row2"];
 	thruster_positions.row(3) << constantData["thruster_positions"]["row3"];
 	thruster_positions.row(4) << constantData["thruster_positions"]["row4"];
-	thruster_positions.row(5) << .1375, .167, -.049;
-	thruster_positions.row(6) << -.1165, -.1975, -.049;
-	thruster_positions.row(7) << .1165, -.1975, -.049;
+	thruster_positions.row(5) << constantData["thruster_positions"]["row5"];
+	thruster_positions.row(6) << constantData["thruster_positions"]["row6"];
+	thruster_positions.row(7) << constantData["thruster_positions"]["row7"];
 	
 	// torques will be calulated about the center of mass
 	thruster_moment_arms = thruster_positions - mass_center.replicate(8, 1);
@@ -52,8 +53,8 @@ Thruster_Commander::Thruster_Commander()
 	thruster_directions.row(2) << 0, 0, 1;
 	thruster_directions.row(3) << 0, 0, 1;
 	thruster_directions.row(4) << -sin45, -sin45, 0;
-	thruster_directions.row(5) <<  sin45, -sin45, 0;
-	thruster_directions.row(6) << sin45, -sin45, 0;
+	thruster_directions.row(5) <<  -sin45, sin45, 0;
+	thruster_directions.row(6) << -sin45, sin45, 0;
 	thruster_directions.row(7) << -sin45, -sin45, 0;
 
 	thruster_torques = Eigen::Matrix<float, 8, 3>::Zero();
@@ -62,7 +63,7 @@ Thruster_Commander::Thruster_Commander()
 		thruster_torques.row(i) = thruster_moment_arms.row(i).cross(thruster_directions.row(i));
 	}
 
-	float volume_inches = 449.157;            // volume of vehicle in inches^3, from onshape. This is likley less than the displacement volume and should be corrected
+	float volume_inches = constantData["volume_inches"];            // volume of vehicle in inches^3, from onshape. This is likley less than the displacement volume and should be corrected
 	volume = volume_inches * pow(0.0254, 3); // convert to meters^3	
 	mass = 5.51; // mass of vehicle in kg, from onshape
 
