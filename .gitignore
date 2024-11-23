@@ -366,3 +366,4 @@ FodyWeavers.xsd
 /Propulsion_2024/build/
 /build
 .vscode/settings.json
+.vscode/tasks.json

@@ -3,6 +3,10 @@
 #include <string>
 #include "Thruster_Commander.h"
 #include "eigen-3.4.0/Eigen/Dense"
+#include "yaml-lib/third-party/yaml-cpp/include/yaml-cpp/yaml.h"
+#include <fstream>
+#include <vector>
+#include <nlohmann/json.hpp>
 
 Thruster_Commander::Thruster_Commander()
 {
@@ -67,10 +71,68 @@ Thruster_Commander::Thruster_Commander()
 	angular_velocity = Eigen::Matrix<float, 1, 3>::Zero();
 	acceleration = Eigen::Matrix<float, 1, 3>::Zero();
 	angular_acceleration = Eigen::Matrix<float, 1, 3>::Zero();
-}
+};
 Thruster_Commander::Thruster_Commander(std::string file)
 {
+	using jsons = nlohmann:json;
+	jsons data{jsons::parse(file)};
 	
+	// Values come from Onshape 2024 Vehicle V10 11/12/24
+	num_thrusters{data["num_thrusters"]};
+	Eigen::Matrix<float, 1, 3> mass_center_inches = config["mass_center_inches"].as<float>();
+	mass_center = mass_center_inches * 0.0254; // convert to meters
+	
+	volume_center = mass_center; // volume center, currently, is a complete guess
+	volume_center(0, 2) += 0.1; // add 0.1 meters to z coordinate to account for the volume center being slightly above the mass center
+
+	// avg(max distance, min distance) of motor part 4 cylindrical surface to orgin
+	// front left top, front right top, rear left top, rear right top, front left bottom, front right bottom, rear left bottom, rear right bottom
+	// x, y, z coordinates here are how the appear on onshape. May need to be corrected to match surge, sway, heave
+
+	thruster_positions = Eigen::Matrix<float, 8, 3>::Zero();
+	thruster_positions.row(0) <<   .2535, -.2035, .042 ;
+	thruster_positions.row(1) <<  .2535, .2035, -.042;
+	thruster_positions.row(2) <<  -.2545, -.2035, .042;
+	thruster_positions.row(3) <<  -.2545, .2035, .042;
+	thruster_positions.row(4) <<  .167, -.1375, -.049;
+	thruster_positions.row(5) <<  .167, .1375, -.049;
+	thruster_positions.row(6) <<  -.1975, -.1165, -.049;
+	thruster_positions.row(7) <<  -.1975, .1165, -.049;
+	
+	// torques will be calulated about the center of mass
+	thruster_moment_arms = thruster_positions - mass_center.replicate(8, 1);
+	
+	// directionality recorded as the direction the front of thruster is facing
+	// force direction will be reversed
+	const double PI = 3.141592653589793;
+	float sin45 = sin(45 * PI / 180);
+	thruster_directions = Eigen::Matrix<float, 8, 3>::Zero();
+	thruster_directions.row(0) << 0, 0, 1;
+	thruster_directions.row(1) << 0, 0, 1;
+	thruster_directions.row(2) << 0, 0, 1;
+	thruster_directions.row(3) << 0, 0, 1;
+	thruster_directions.row(4) << -sin45, -sin45, 0;
+	thruster_directions.row(5) <<  -sin45, sin45, 0;
+	thruster_directions.row(6) << -sin45, sin45, 0;
+	thruster_directions.row(7) << -sin45, -sin45, 0;
+
+	thruster_torques = Eigen::Matrix<float, 8, 3>::Zero();
+	for (int i = 0; i < num_thrusters; i++)
+	{
+		thruster_torques.row(i) = thruster_moment_arms.row(i).cross(thruster_directions.row(i));
+	}
+
+	float volume_inches = 449.157;            // volume of vehicle in inches^3, from onshape. This is likley less than the displacement volume and should be corrected
+	volume = volume_inches * pow(0.0254, 3); // convert to meters^3	
+	mass = 5.51; // mass of vehicle in kg, from onshape
+
+	// all zeros for now
+	position = Eigen::Matrix<float, 1, 3>::Zero();
+	orientation = Eigen::Matrix<float, 1, 3>::Zero();
+	velocity = Eigen::Matrix<float, 1, 3>::Zero();
+	angular_velocity = Eigen::Matrix<float, 1, 3>::Zero();
+	acceleration = Eigen::Matrix<float, 1, 3>::Zero();
+	angular_acceleration = Eigen::Matrix<float, 1, 3>::Zero();
 }
 Thruster_Commander::~Thruster_Commander()
 {
