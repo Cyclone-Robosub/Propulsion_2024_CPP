@@ -9,6 +9,10 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <yaml-cpp/yaml.h>
+#include <yamlcpp/node/node.h>
+#include <yamlcpp/node/parse.h>
+
 
 
 Thruster_Commander::Thruster_Commander()
@@ -89,7 +93,60 @@ Thruster_Commander::Thruster_Commander()
 	// Eigen::Matrix<float, 2, 6> min_max_voltages = {}
 }
 Thruster_Commander::~Thruster_Commander(){}
+Thruster_Commander::Thruster_Commander(std::string filename) {
+	YAML::Node config = YAML::LoadFile(filename);
+	num_thrusters = config[num_thrusters].as<int>();
+	three_axis mass_center_inches = {config["mass_center_inches"]["x"].as<float>(), config["mass_center_inches"]["y"].as<float>(), config["mass_center_inches"]["z"].as<float>()};
+	mass_center = mass_center_inches * 0.0254;
 
+	volume_center = volume_center * 0.0254;
+	thruster_positions = thruster_set_3D::Zero();
+	thruster_positions.row(0) << config["thruster_positions"]["row0"].as<float>();
+	thruster_positions.row(1) << config["thruster_positions"]["row1"].as<float>();
+	thruster_positions.row(2) << config["thruster_positions"]["row2"].as<float>();
+	thruster_positions.row(3) <<  config["thruster_positions"]["row3"].as<float>();
+	thruster_positions.row(4) <<  config["thruster_positions"]["row4"].as<float>();
+	thruster_positions.row(5) <<  config["thruster_positions"]["row5"].as<float>();
+	thruster_positions.row(6) <<  config["thruster_positions"]["row6"].as<float>();
+	thruster_positions.row(7) <<  config["thruster_positions"]["row7"].as<float>();
+	rho_water = config["rho_water"].as<float>();
+	gravity = config["gravity"].as<float>();
+	volume = config["volume"].as<float>();
+	mass = config["mass"].as<float>();
+	weight_magnitude = mass * gravity;
+	buoyant_magnitude = -rho_water * gravity * volume;
+	position = six_axis::Zero();
+	velocity = six_axis::Zero();
+	acceleration = six_axis::Zero();
+
+	const double PI = 3.141592653589793;
+	float sin45 = sin(45 * PI / 180);
+	thruster_directions = thruster_set_3D::Zero();
+	thruster_directions.row(0) << config["thruster_directions"]["row0"].as<float>();
+	thruster_directions.row(1) << config["thruster_directions"]["row1"].as<float>();
+	thruster_directions.row(2) << config["thruster_directions"]["row2"].as<float>();
+	thruster_directions.row(3) << config["thruster_directions"]["row3"].as<float>();
+	thruster_directions.row(4) << config["thruster_directions"]["row4"].as<float>();
+	thruster_directions.row(5) <<config["thruster_directions"]["row5"].as<float>();
+	thruster_directions.row(6) << config["thruster_directions"]["row6"].as<float>();
+	thruster_directions.row(7) << config["thruster_directions"]["row7"].as<float>();
+	thruster_moment_arms = thruster_positions - mass_center.replicate(8, 1);
+
+	thruster_torques = thruster_set_3D::Zero();
+	for (int i = 0; i < num_thrusters; i++)
+	{
+		thruster_torques.row(i) = thruster_moment_arms.row(i).cross(thruster_directions.row(i));
+	}
+
+
+	wrench_matrix_transposed = thruster_set_6D::Zero();
+	for (int i = 0; i < num_thrusters; i++)
+	{
+		wrench_matrix_transposed.row(i).segment(0, 3) = thruster_directions.row(i);
+		wrench_matrix_transposed.row(i).segment(3, 3) = thruster_torques.row(i);
+	}
+	wrench_matrix = wrench_matrix_transposed.transpose();
+}
 void Thruster_Commander::print_info()
 {
 
