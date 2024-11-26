@@ -92,4 +92,10 @@ TEST(ThrusterCommanderTest, GetPwmOutOfBounds) {
     delete thrusterCommander;
 }
 
-
+TEST(ThrusterCommanderTest, CompareConstructors) {
+    ThrusterCommander commander = new ThrusterCommander();
+    ThrusterCommander commander2 = new ThrusterCommander(/data/config1.yaml);
+    commander.print_info();
+    commander2.print_info();
+    ASSERT_TRUE(commander.print_info() == commander2.print_info());
+}
